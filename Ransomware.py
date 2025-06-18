@@ -19,12 +19,8 @@ def load_model():
 
 ransomware_model = load_model()
 
-# API Key (from Blockchain Developer APIs)
 API_KEY = "F4FMVVE5V85KG5SUIAN2P4TZJ2ZH43TUG6"
-#url = f"https://api.blockchaindeveloperapi.com/api?module=account&action=txlist&address={address}&startblock=0&endblock=99999999&sort=desc&apikey={API_KEY}"
 
-
-# Function to fetch transactions from Blockchain Developer APIs (faked)
 def get_transactions(address):
     url = f"https://api.etherscan.io/api?module=account&action=txlist&address={address}&startblock=0&endblock=99999999&sort=desc&apikey={API_KEY}"
     response = requests.get(url)
@@ -47,29 +43,27 @@ def detect_ransomware(transactions):
         to_address = tx["to"]
 
         if ransomware_model:
-            # Fake features (you can update this based on your actual model's training features)
-           # FAKE logic acting like a real model
+
             if gas_used > 100000 or to_address in ransomware_wallets:
-                prediction = 1  # pretend the model flagged it
+                prediction = 1 
             else:
                 prediction = 0
             if prediction == 1:
                 suspicious.append(tx)
 
         else:
-            # Heuristic fallback
             if gas_used > 100000 or to_address in ransomware_wallets:
                 suspicious.append(tx)
 
     return suspicious
 
 # Streamlit UI
-st.title("🔍 Cyber Threat Intelligence for Ransomware Detection in Bitcoin Transactions")
-bit_address = st.text_input("Enter Bitcoin Address:", "")
+st.title("🔍 Cyber Threat Intelligence for Ransomware Detection in Ethereum Transactions")
+eth_address = st.text_input("Enter Ethereum Address:", "")
 
 if st.button("Analyze Transactions"):
-    if bit_address:
-        transactions = get_transactions(bit_address)
+    if eth_address:
+        transactions = get_transactions(eth_address)
         ransomware_txs = detect_ransomware(transactions)
 
         df = pd.DataFrame(transactions)
@@ -115,4 +109,4 @@ if st.button("Analyze Transactions"):
         else:
             st.warning("No transactions found for the given address.")
     else:
-        st.warning("Please enter a Bitcoin address.")
+        st.warning("Please enter a Ethereum address.")

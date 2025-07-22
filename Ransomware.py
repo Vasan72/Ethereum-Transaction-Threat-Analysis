@@ -3,21 +3,8 @@ import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import json
-import joblib  
 import numpy as np
 
-
-@st.cache_resource
-def load_model():   
-    try:
-        model = joblib.load("ransomware_model.pkl")  
-        return model
-    except:
-        st.warning("⚠️ Model file not found. Using heuristic detection instead.")
-        return None
-
-ransomware_model = load_model()
 
 API_KEY = "F4FMVVE5V85KG5SUIAN2P4TZJ2ZH43TUG6"
 
@@ -42,13 +29,12 @@ def detect_ransomware(transactions):
         value_eth = int(tx["value"]) / 10**18
         to_address = tx["to"]
 
-        if ransomware_model:
 
-            if gas_used > 100000 or to_address in ransomware_wallets:
+        if gas_used > 100000 or to_address in ransomware_wallets:
                 prediction = 1 
-            else:
+        else:
                 prediction = 0
-            if prediction == 1:
+        if prediction == 1:
                 suspicious.append(tx)
 
         else:
